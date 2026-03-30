@@ -520,7 +520,7 @@ ORDER BY continent, RankWithinContinent
 
 
 -- 6.6 CTE -- Rolling vaccination % of population
-WITH VaccinationProgress AS (
+;WITH VaccinationProgress AS (
     SELECT
         dea.continent,
         dea.location,
@@ -588,6 +588,7 @@ ORDER BY location, date
 
 -- 7.1 View: Global death summary by country
 -- Use in Power BI for world map / bar chart visuals
+GO
 CREATE OR ALTER VIEW vw_CountryDeathSummary AS
 SELECT
     location,
@@ -605,6 +606,7 @@ GROUP BY location, population
 
 -- 7.2 View: Infection rate by country
 -- Use in Power BI for choropleth / top-N visuals
+GO
 CREATE OR ALTER VIEW vw_CountryInfectionRate AS
 SELECT
     location,
@@ -619,6 +621,7 @@ GROUP BY location, population
 
 -- 7.3 View: Daily global trend (cases + deaths)
 -- Use in Power BI for line chart over time
+GO
 CREATE OR ALTER VIEW vw_GlobalDailyTrend AS
 SELECT
     date,
@@ -635,6 +638,7 @@ GROUP BY date
 
 -- 7.4 View: Rolling vaccination progress per country
 -- Use in Power BI for vaccination tracker line chart
+GO
 CREATE OR ALTER VIEW vw_RollingVaccinationProgress AS
 SELECT
     dea.continent,
@@ -659,6 +663,7 @@ WHERE dea.continent IS NOT NULL
 
 -- 7.5 View: Continent-level death summary
 -- Use in Power BI for continent comparison bar chart
+GO
 CREATE OR ALTER VIEW vw_ContinentDeathSummary AS
 SELECT
     continent,
@@ -673,6 +678,7 @@ GROUP BY continent
 
 -- 7.6 View: Vaccination vs death rate per country
 -- Use in Power BI for scatter plot analysis
+GO
 CREATE OR ALTER VIEW vw_VaccinationVsDeathRate AS
 SELECT
     dea.location,
@@ -697,6 +703,7 @@ GROUP BY dea.location, dea.population
 
 -- 8.1 Get full COVID summary for any country
 -- Usage: EXEC usp_CountrySummary 'India'
+GO
 CREATE OR ALTER PROCEDURE usp_CountrySummary
     @CountryName NVARCHAR(255)
 AS
@@ -726,6 +733,7 @@ END
 
 -- 8.2 Get daily trend for any country between two dates
 -- Usage: EXEC usp_CountryDailyTrend 'India', '2021-01-01', '2021-12-31'
+GO
 CREATE OR ALTER PROCEDURE usp_CountryDailyTrend
     @CountryName NVARCHAR(255),
     @StartDate   DATE,
@@ -755,6 +763,7 @@ END
 
 -- 8.3 Get top N countries by a chosen metric
 -- Usage: EXEC usp_TopNCountries 'DeathRate', 10
+GO
 CREATE OR ALTER PROCEDURE usp_TopNCountries
     @Metric NVARCHAR(50),   -- 'DeathRate' | 'InfectionRate' | 'TotalDeaths' | 'TotalCases'
     @TopN   INT
@@ -804,6 +813,7 @@ END
 
 -- 8.4 Get vaccination rollout for any country
 -- Usage: EXEC usp_CountryVaccinationRollout 'India'
+GO
 CREATE OR ALTER PROCEDURE usp_CountryVaccinationRollout
     @CountryName NVARCHAR(255)
 AS
@@ -971,6 +981,7 @@ ORDER BY VaccinationRank
 
 -- 9.10 Final view: Master KPI table for Power BI dashboard
 -- Single source of truth combining all key metrics per country
+GO
 CREATE OR ALTER VIEW vw_MasterKPI AS
 SELECT
     dea.location,
